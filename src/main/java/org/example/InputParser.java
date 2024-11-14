@@ -26,4 +26,12 @@ public class InputParser {
         return new Position(x, y, direction);
 
     }
+
+    public static Instruction[] parseInstructions(String input){
+        Instruction[] instructions = new Instruction[input.length()];
+        for (int i = 0; i < input.length(); i++) {
+            instructions[i]=Instruction.valueOf(input.substring(i,i+1));
+        }
+        return instructions;
+    }
 }
