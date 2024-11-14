@@ -64,6 +64,34 @@ public class Rover {
         }
     }
 
+    public void move(Instruction instruction) {
+        if (instruction.equals(Instruction.L) || instruction.equals(Instruction.R)) {
+            throw new IllegalArgumentException("Invalid instruction");
+        }
+        if (position.getDirection() == null) {
+            throw new IllegalArgumentException("Invalid direction");
+        }
+        switch (position.getDirection()) {
+            case Direction.N:
+                position.setY(position.getY()+1);
+                break;
+
+            case Direction.E:
+                position.setX(position.getX()+1);
+                break;
+
+            case Direction.S:
+                position.setY(position.getY()-1);
+                break;
+
+            case Direction.W:
+                position.setX(position.getX()-1);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid direction");
+        }
+    }
 
 
 }

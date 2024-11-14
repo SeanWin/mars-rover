@@ -70,7 +70,7 @@ public class RoverTest {
     }
 
     @Test
-    void testInvalidDirection() {
+    void turn_testInvalidDirection() {
         Position startPosition = new Position(0, 0, null);
         Rover rover = new Rover(startPosition);
 
@@ -89,5 +89,78 @@ public class RoverTest {
             rover.turn(Instruction.M); // M is invalid for a turn
         });
         assertEquals("Invalid instruction", exception.getMessage());
+    }
+
+    @Test
+    void testMoveNorth() {
+        Position startPosition = new Position(0, 0, Direction.N);
+        Rover rover = new Rover(startPosition);
+        rover.move(Instruction.M);
+        assertEquals(0, rover.getPosition().getX());
+        assertEquals(1, rover.getPosition().getY());
+        assertEquals(Direction.N, rover.getPosition().getDirection());
+    }
+
+    @Test
+    void testMoveEast() {
+        Position startPosition = new Position(0, 0, Direction.E);
+        Rover rover = new Rover(startPosition);
+        rover.move(Instruction.M);
+        assertEquals(1, rover.getPosition().getX());
+        assertEquals(0, rover.getPosition().getY());
+        assertEquals(Direction.E, rover.getPosition().getDirection());
+    }
+
+    @Test
+    void testMoveSouth() {
+        Position startPosition = new Position(0, 1, Direction.S);
+        Rover rover = new Rover(startPosition);
+        rover.move(Instruction.M);
+        assertEquals(0, rover.getPosition().getX());
+        assertEquals(0, rover.getPosition().getY());
+        assertEquals(Direction.S, rover.getPosition().getDirection());
+    }
+
+    @Test
+    void testMoveWest() {
+        Position startPosition = new Position(1, 0, Direction.W);
+        Rover rover = new Rover(startPosition);
+        rover.move(Instruction.M);
+        assertEquals(0, rover.getPosition().getX());
+        assertEquals(0, rover.getPosition().getY());
+        assertEquals(Direction.W, rover.getPosition().getDirection());
+    }
+
+    @Test
+    void testInvalidInstructionLeft() {
+        Position startPosition = new Position(0, 0, Direction.N);
+        Rover rover = new Rover(startPosition);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            rover.move(Instruction.L);
+        });
+        assertEquals("Invalid instruction", exception.getMessage());
+    }
+
+    @Test
+    void testInvalidInstructionRight() {
+        Position startPosition = new Position(0, 0, Direction.N);
+        Rover rover = new Rover(startPosition);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            rover.move(Instruction.R);
+        });
+        assertEquals("Invalid instruction", exception.getMessage());
+    }
+
+    @Test
+    void move_testInvalidDirection() {
+        Position startPosition = new Position(0, 0, null);
+        Rover rover = new Rover(startPosition);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            rover.move(Instruction.M);
+        });
+        assertEquals("Invalid direction", exception.getMessage());
     }
 }
