@@ -7,7 +7,8 @@ public class Plateau {
         this.plateauSize = plateauSize;
     }
 
-    public boolean isWithinBounds(Position position){
-        return 0 <= position.getX() && position.getX() <= plateauSize.getX() && 0 <= position.getY() && position.getY() <= plateauSize.getY();
+    public boolean isWithinBounds(int x, int y){
+        return 0 <= x && x <= plateauSize.getX() && 0 <= y && y <= plateauSize.getY();
     }
+
 }
