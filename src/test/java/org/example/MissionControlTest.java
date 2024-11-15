@@ -99,4 +99,94 @@ class MissionControlTest {
         assertEquals(3, positions.get(1).getY());
         assertEquals(Direction.E, positions.get(1).getDirection());
     }
+
+    @Test
+    void testExecuteInstructions_emptyInstructions() {
+        Position startPosition = new Position(1, 1, Direction.N);
+        Rover rover = new Rover(startPosition);
+
+        Instruction[] instructions = {};
+        Position finalPosition = missionControl.executeInstructions(rover, instructions);
+
+        assertEquals(1, finalPosition.getX());
+        assertEquals(1, finalPosition.getY());
+        assertEquals(Direction.N, finalPosition.getDirection());
+    }
+
+    @Test
+    void testExecuteInstructions_justTurn() {
+        Position startPosition = new Position(1, 2, Direction.N);
+        Rover rover = new Rover(startPosition);
+
+        Instruction[] instructions = {Instruction.L,Instruction.R};
+        Position finalPosition = missionControl.executeInstructions(rover, instructions);
+
+        assertEquals(1, finalPosition.getX());
+        assertEquals(2, finalPosition.getY());
+        assertEquals(Direction.N, finalPosition.getDirection());
+    }
+
+    @Test
+    void testExecuteInstructions_justMove() {
+        Position startPosition = new Position(1, 2, Direction.N);
+        Rover rover = new Rover(startPosition);
+
+        Instruction[] instructions = {Instruction.M};
+        Position finalPosition = missionControl.executeInstructions(rover, instructions);
+
+        assertEquals(1, finalPosition.getX());
+        assertEquals(3, finalPosition.getY());
+        assertEquals(Direction.N, finalPosition.getDirection());
+    }
+
+    @Test
+    void testExecuteInstructions_mixedInstructions() {
+        Position startPosition = new Position(1, 2, Direction.N);
+        Rover rover = new Rover(startPosition);
+
+        Instruction[] instructions = {
+                Instruction.L, Instruction.M,
+                Instruction.L, Instruction.M,
+                Instruction.L, Instruction.M,
+                Instruction.L, Instruction.M,
+                Instruction.M
+        };
+
+        Position finalPosition = missionControl.executeInstructions(rover, instructions);
+
+        assertEquals(1, finalPosition.getX());
+        assertEquals(3, finalPosition.getY());
+        assertEquals(Direction.N, finalPosition.getDirection());
+    }
+
+    @Test
+    void testExecuteInstructions_mixedInstructions2() {
+        Position startPosition = new Position(2, 2, Direction.W);
+        Rover rover = new Rover(startPosition);
+
+        Instruction[] instructions = {
+                Instruction.M, Instruction.R, Instruction.M, Instruction.L,
+                Instruction.L, Instruction.M, Instruction.M, Instruction.R
+        };
+        Position finalPosition = missionControl.executeInstructions(rover, instructions);
+
+        assertEquals(1, finalPosition.getX());
+        assertEquals(1, finalPosition.getY());
+        assertEquals(Direction.W, finalPosition.getDirection());
+    }
+
+    @Test
+    void testExecuteInstructions_OutOfBounds() {
+        Position startPosition = new Position(0, 0, Direction.S);
+        Rover rover = new Rover(startPosition);
+
+        Instruction[] instructions = {Instruction.M};
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            missionControl.executeInstructions(rover, instructions);
+        });
+
+        assertEquals("Rover out of bounds", exception.getMessage());
+    }
+
 }

@@ -25,4 +25,20 @@ public class MissionControl {
         }
         return positions;
     }
+
+    public Position executeInstructions(Rover rover, Instruction[] instructions){
+        for(Instruction instruction:instructions){
+            if(instruction.equals(Instruction.M)){
+                Position nextPosition = rover.nextPosition();
+                if(!plateau.isWithinBounds(nextPosition.getX(), nextPosition.getY())){
+                    throw new IllegalStateException("Rover out of bounds");
+                }
+                rover.move();
+            }
+            else{
+                rover.turn(instruction);
+            }
+        }
+        return rover.getPosition();
+    }
 }
