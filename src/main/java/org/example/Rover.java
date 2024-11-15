@@ -64,10 +64,8 @@ public class Rover {
         }
     }
 
-    public void move(Instruction instruction) {
-        if (instruction.equals(Instruction.L) || instruction.equals(Instruction.R)) {
-            throw new IllegalArgumentException("Invalid instruction");
-        }
+    public void move() {
+
         if (position.getDirection() == null) {
             throw new IllegalArgumentException("Invalid direction");
         }
