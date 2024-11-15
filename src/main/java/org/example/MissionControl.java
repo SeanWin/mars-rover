@@ -17,4 +17,12 @@ public class MissionControl {
             throw new IllegalArgumentException("Rover position out of bounds");
         rovers.add(rover);
     }
+
+    public List<Position> getRoverPositions(){
+        ArrayList<Position> positions = new ArrayList<>();
+        for (Rover rover:rovers) {
+            positions.add(rover.getPosition());
+        }
+        return positions;
+    }
 }
