@@ -2,7 +2,6 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +54,20 @@ class MissionControlTest {
             missionControl.addRover(rover);
         });
         assertEquals("Rover position out of bounds", exception.getMessage());
+    }
+
+    @Test
+    void testAddRover_PositionAlreadyOccupied() {
+        Position position = new Position(1, 2, Direction.N);
+        Rover rover1 = new Rover(position);
+        Rover rover2 = new Rover(position);
+
+        missionControl.addRover(rover1);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            missionControl.addRover(rover2);
+        });
+        assertEquals("Cannot deploy here, position already occupied", exception.getMessage());
     }
 
     @Test

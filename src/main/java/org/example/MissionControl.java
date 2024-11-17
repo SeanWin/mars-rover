@@ -15,6 +15,10 @@ public class MissionControl {
     public void addRover(Rover rover){
         if(!plateau.isWithinBounds(rover.getPosition().getX(),rover.getPosition().getY()))
             throw new IllegalArgumentException("Rover position out of bounds");
+
+        if(getRoverPositions().contains(rover.getPosition())){
+            throw new IllegalStateException("Cannot deploy here, position already occupied");
+        }
         rovers.add(rover);
     }
 
