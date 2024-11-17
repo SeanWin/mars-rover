@@ -19,10 +19,24 @@ public class UI {
                 String input = scanner.nextLine();
                 PlateauSize plateauSize = InputParser.parsePlateau(input);
                 missionControl = new MissionControl(new Plateau(plateauSize));
-                State nextState = State.DEPLOY_ROVER;
-                return nextState;
+                return State.DEPLOY_ROVER;
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid size, please reenter");
+            }
+        }
+    }
+
+    public State deployRover(){
+        while(true){
+            try{
+                System.out.println("Enter rover position");
+                String input = scanner.nextLine();
+                Position position = InputParser.parsePosition(input);
+                Rover rover = new Rover(position);
+                missionControl.addRover(rover);
+                return State.INPUT_INSTRUCTIONS;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Please reenter a position within plateau bounds");
             }
         }
     }
