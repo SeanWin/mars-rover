@@ -4,6 +4,9 @@ public class Plateau {
     PlateauSize plateauSize;
 
     public Plateau(PlateauSize plateauSize) {
+        if(plateauSize.getX()<1||plateauSize.getY()<1){
+            throw new IllegalArgumentException("Plateau size must be non negative");
+        }
         this.plateauSize = plateauSize;
     }
 
