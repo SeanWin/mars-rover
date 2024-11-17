@@ -8,12 +8,12 @@ public class UI {
     private State state;
     private MissionControl missionControl;
     private Scanner scanner;
-    private List<Position> finalPositions;
+    private List<String> stringFinalPositions;
 
     public UI() {
         state = State.SETUP_PLATEAU;
         scanner = new Scanner(System.in);
-        finalPositions = new ArrayList<>();
+        stringFinalPositions = new ArrayList<>();
     }
 
     public State setupPlateau(){
@@ -54,7 +54,7 @@ public class UI {
                 Rover rover = missionControl.rovers.getLast();
                 Position finalPosition = missionControl.executeInstructions(rover, instructions);
                 System.out.println(finalPosition.getX()+" "+finalPosition.getY()+" "+finalPosition.getDirection());
-                finalPositions.add(finalPosition);
+                stringFinalPositions.add(finalPosition.getX()+" "+finalPosition.getY()+" "+finalPosition.getDirection());
                 System.out.println("Add another rover? (y/n):");
                 String choice = scanner.nextLine();
                 if (choice.equalsIgnoreCase("y")) {
@@ -66,6 +66,23 @@ public class UI {
                 System.out.println("Rover position will be invalid, please reenter valid instructions");;
             }
         }
+    }
+
+    public void printPositions(){
+        stringFinalPositions.forEach(System.out::println);
+    }
+
+    public void start(){
+        while (state!=State.FINISH){
+            switch (state){
+                case SETUP_PLATEAU -> state = setupPlateau();
+                case DEPLOY_ROVER -> state = deployRover();
+                case INPUT_INSTRUCTIONS -> state = inputInstructions();
+            }
+        }
+        System.out.println("Rover final positions are: ");
+        printPositions();
+        System.out.println("Mission completed!");
     }
 
 }
