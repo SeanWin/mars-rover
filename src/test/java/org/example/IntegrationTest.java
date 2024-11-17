@@ -71,7 +71,7 @@ class IntegrationTest {
         String rover1PositionInput = "1 1 N";
         String rover1InstructionsInput = "MMRMM";
 
-        String rover2PositionInput = "3 3 E";
+        String rover2PositionInput = "4 3 E";
         String rover2InstructionsInput = "MRMRM";
 
         String rover3PositionInput = "0 0 E";
@@ -104,7 +104,7 @@ class IntegrationTest {
         Position finalPosition3 = missionControl.executeInstructions(rover3, instructions3);
 
         Position expected1 = new Position(3, 3, Direction.E);
-        Position expected2 = new Position(3, 2, Direction.W);
+        Position expected2 = new Position(4, 2, Direction.W);
         Position expected3 = new Position(4, 0, Direction.N);
 
         assertEquals(expected1.getX(),finalPosition1.getX());
