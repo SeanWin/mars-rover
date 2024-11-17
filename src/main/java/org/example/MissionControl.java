@@ -16,7 +16,7 @@ public class MissionControl {
         if(!plateau.isWithinBounds(rover.getPosition().getX(),rover.getPosition().getY()))
             throw new IllegalArgumentException("Rover position out of bounds");
 
-        if(getRoverPositions().contains(rover.getPosition())){
+        if (getRoverPositions().stream().anyMatch(pos -> pos.getX() == rover.getPosition().getX() && pos.getY() == rover.getPosition().getY())) {
             throw new IllegalStateException("Cannot deploy here, position already occupied");
         }
         rovers.add(rover);
@@ -36,6 +36,9 @@ public class MissionControl {
                 Position nextPosition = rover.nextPosition();
                 if(!plateau.isWithinBounds(nextPosition.getX(), nextPosition.getY())){
                     throw new IllegalStateException("Rover out of bounds");
+                }
+                if (getRoverPositions().stream().anyMatch(pos -> pos.getX() == nextPosition.getX() && pos.getY() == nextPosition.getY())) {
+                    throw new IllegalArgumentException("Cannot move here, position already occupied");
                 }
                 rover.move();
             }

@@ -71,6 +71,21 @@ class MissionControlTest {
     }
 
     @Test
+    void testAddRover_PositionAlreadyOccupied_differentDirection() {
+        Position position = new Position(1, 2, Direction.N);
+        Position position2 = new Position(1, 2, Direction.S);
+        Rover rover1 = new Rover(position);
+        Rover rover2 = new Rover(position2);
+
+        missionControl.addRover(rover1);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            missionControl.addRover(rover2);
+        });
+        assertEquals("Cannot deploy here, position already occupied", exception.getMessage());
+    }
+
+    @Test
     void testGetRoverPositions_EmptyList() {
         List<Position> positions = missionControl.getRoverPositions();
         assertEquals(0, positions.size()); // Expecting an empty list
@@ -200,6 +215,46 @@ class MissionControlTest {
         });
 
         assertEquals("Rover out of bounds", exception.getMessage());
+    }
+
+    @Test
+    void testExecuteInstructions_MovingToOccupiedSpot() {
+        Position position1 = new Position(0, 0, Direction.N);
+        Rover rover1 = new Rover(position1);
+        missionControl.addRover(rover1);
+
+        Position position2 = new Position(0, 1, Direction.N);
+        Rover rover2 = new Rover(position2);
+        missionControl.addRover(rover2);
+
+        Instruction[] instructions = {Instruction.M};
+
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            missionControl.executeInstructions(rover1, instructions);
+        });
+
+        assertEquals("Cannot move here, position already occupied", exception.getMessage());
+    }
+
+    @Test
+    void testExecuteInstructions_MovingToOccupiedSpot_differentDirections() {
+        Position position1 = new Position(0, 0, Direction.N);
+        Rover rover1 = new Rover(position1);
+        missionControl.addRover(rover1);
+
+        Position position2 = new Position(0, 1, Direction.W);
+        Rover rover2 = new Rover(position2);
+        missionControl.addRover(rover2);
+
+        Instruction[] instructions = {Instruction.M};
+
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            missionControl.executeInstructions(rover1, instructions);
+        });
+
+        assertEquals("Cannot move here, position already occupied", exception.getMessage());
     }
 
 }
