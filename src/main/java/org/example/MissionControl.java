@@ -48,4 +48,45 @@ public class MissionControl {
         }
         return rover.getPosition();
     }
+
+    public boolean isValidSimulation (Rover rover, Instruction[] instructions) {
+        Position simulatedPosition = new Position(
+                rover.getPosition().getX(),
+                rover.getPosition().getY(),
+                rover.getPosition().getDirection()
+        );
+        Rover simulatedRover = new Rover(simulatedPosition);
+        List<Position> otherRoverPositions = getOtherRoverPositions(rover);
+
+        for(Instruction instruction:instructions){
+            if(instruction.equals(Instruction.M)){
+                Position nextPosition = simulatedRover.nextPosition();
+                if(!plateau.isWithinBounds(nextPosition.getX(), nextPosition.getY())){
+                    throw new IllegalStateException("Rover out of bounds");
+                }
+                if (otherRoverPositions.stream().anyMatch(pos -> pos.getX() == nextPosition.getX() && pos.getY() == nextPosition.getY())) {
+                    throw new IllegalArgumentException("Cannot move here, position already occupied");
+                }
+                simulatedRover.move();
+            }
+            else{
+                simulatedRover.turn(instruction);
+            }
+        }
+        return true;
+    }
+
+    public List<Position> getOtherRoverPositions(Rover currentRover) {
+        List<Position> otherRoverPositions = new ArrayList<>();
+
+        for (Rover rover : rovers) {
+            // Skip the rover whose movement is being simulated
+            if (!rover.equals(currentRover)) {
+                otherRoverPositions.add(rover.getPosition());
+            }
+        }
+
+        return otherRoverPositions;
+    }
+
 }

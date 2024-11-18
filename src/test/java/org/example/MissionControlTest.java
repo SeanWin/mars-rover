@@ -257,4 +257,83 @@ class MissionControlTest {
         assertEquals("Cannot move here, position already occupied", exception.getMessage());
     }
 
+    @Test
+    void testGetOtherRoverPositions_SingleRover() {
+        Rover rover1 = new Rover(new Position(0, 0, Direction.W));
+        missionControl.addRover(rover1);
+
+        List<Position> otherPositions = missionControl.getOtherRoverPositions(rover1);
+
+        assertEquals(0, otherPositions.size());
+    }
+
+    @Test
+    void testGetOtherRoverPositions_WithMultipleRovers() {
+        Rover rover1 = new Rover(new Position(1, 1, Direction.N));
+        Rover rover2 = new Rover(new Position(2, 2, Direction.E));
+        Rover rover3 = new Rover(new Position(3, 3, Direction.S));
+        missionControl.addRover(rover1);
+        missionControl.addRover(rover2);
+        missionControl.addRover(rover3);
+
+        List<Position> otherPositions = missionControl.getOtherRoverPositions(rover2);
+
+        assertEquals(2, otherPositions.size());
+        Position p1 = otherPositions.get(0);
+        Position p2 = otherPositions.get(1);
+
+        assertEquals(1, p1.getX());
+        assertEquals(1, p1.getY());
+        assertEquals(Direction.N, p1.getDirection());
+
+        assertEquals(3, p2.getX());
+        assertEquals(3, p2.getY());
+        assertEquals(Direction.S, p2.getDirection());
+
+    }
+
+    @Test
+    void testIsValidSimulation_NoCollisionWithinBounds() {
+        Rover rover = new Rover(new Position(1, 2, Direction.N));
+        missionControl.addRover(rover);
+        Instruction[] instructions = {Instruction.M, Instruction.R, Instruction.M};
+
+        assertTrue(missionControl.isValidSimulation(rover, instructions));
+    }
+
+    @Test
+    void testIsValidSimulation_OutOfBounds() {
+        Rover rover = new Rover(new Position(5, 5, Direction.N));
+        missionControl.addRover(rover);
+        Instruction[] instructions = {Instruction.M};
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            missionControl.isValidSimulation(rover, instructions);
+        });
+        assertEquals("Rover out of bounds", exception.getMessage());
+    }
+
+    @Test
+    void testIsValidSimulation_CollisionWithAnotherRover() {
+        Rover rover1 = new Rover(new Position(1, 1, Direction.N));
+        Rover rover2 = new Rover(new Position(1, 2, Direction.S));
+        missionControl.addRover(rover1);
+        missionControl.addRover(rover2);
+        Instruction[] instructions = {Instruction.M}; // Moving north to collide
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            missionControl.isValidSimulation(rover1, instructions);
+        });
+        assertEquals("Cannot move here, position already occupied", exception.getMessage());
+    }
+
+    @Test
+    void testIsValidSimulation_MoveBackToSamePosition() {
+        Rover rover = new Rover(new Position(1, 2, Direction.N));
+        missionControl.addRover(rover);
+        Instruction[] instructions = {Instruction.M, Instruction.R, Instruction.R,Instruction.M};
+
+        assertTrue(missionControl.isValidSimulation(rover, instructions));
+    }
+
 }
