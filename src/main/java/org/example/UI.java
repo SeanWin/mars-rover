@@ -41,6 +41,8 @@ public class UI {
                 return State.INPUT_INSTRUCTIONS;
             } catch (IllegalArgumentException e) {
                 System.out.println("Please reenter a position within plateau bounds");
+            } catch (IllegalStateException e) {
+                System.out.println("Please reenter a position which isn't already occupied");;
             }
         }
     }
@@ -64,6 +66,8 @@ public class UI {
                 }
             } catch (IllegalStateException e) {
                 System.out.println("Rover position will be invalid, please reenter valid instructions");;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Rover collision detected! Please reenter valid instructions");;
             }
         }
     }
