@@ -25,7 +25,7 @@ public class UI {
                 missionControl = new MissionControl(new Plateau(plateauSize));
                 return State.DEPLOY_ROVER;
             } catch (IllegalArgumentException e) {
-                System.out.println("Invalid size, please reenter");
+                System.out.println("Error: invalid size, please reenter a valid size");
             }
         }
     }
@@ -40,9 +40,9 @@ public class UI {
                 missionControl.addRover(rover);
                 return State.INPUT_INSTRUCTIONS;
             } catch (IllegalArgumentException e) {
-                System.out.println("Please reenter a position within plateau bounds");
+                System.out.println("Error: rover deployment out of bounds detected! Please reenter a position within plateau bounds");
             } catch (IllegalStateException e) {
-                System.out.println("Please reenter a position which isn't already occupied");;
+                System.out.println("Error: rover deployment collision detected! Please reenter a position which isn't already occupied");;
             }
         }
     }
@@ -65,9 +65,9 @@ public class UI {
                     return State.FINISH;
                 }
             } catch (IllegalStateException e) {
-                System.out.println("Rover position will be invalid, please reenter valid instructions");;
+                System.out.println("Error: rover movement out of bounds detected! please reenter valid instructions");;
             } catch (IllegalArgumentException e) {
-                System.out.println("Rover collision detected! Please reenter valid instructions");;
+                System.out.println("Error: rover collision detected! Please reenter valid instructions");;
             }
         }
     }
