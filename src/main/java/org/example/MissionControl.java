@@ -49,7 +49,7 @@ public class MissionControl {
         return rover.getPosition();
     }
 
-    public boolean isValidSimulation (Rover rover, Instruction[] instructions) {
+    public void simulateInstructions(Rover rover, Instruction[] instructions) {
         Position simulatedPosition = new Position(
                 rover.getPosition().getX(),
                 rover.getPosition().getY(),
@@ -73,7 +73,6 @@ public class MissionControl {
                 simulatedRover.turn(instruction);
             }
         }
-        return true;
     }
 
     public List<Position> getOtherRoverPositions(Rover currentRover) {
