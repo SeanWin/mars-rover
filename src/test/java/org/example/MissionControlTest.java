@@ -215,6 +215,11 @@ class MissionControlTest {
         });
 
         assertEquals("Rover out of bounds", exception.getMessage());
+
+        //Check the rover position remains unchanged
+        assertEquals(0, rover.getPosition().getX());
+        assertEquals(0, rover.getPosition().getY());
+        assertEquals(Direction.S, rover.getPosition().getDirection());
     }
 
     @Test
@@ -235,6 +240,11 @@ class MissionControlTest {
         });
 
         assertEquals("Cannot move here, position already occupied", exception.getMessage());
+
+        //Check the rover position remains unchanged
+        assertEquals(0, rover1.getPosition().getX());
+        assertEquals(0, rover1.getPosition().getY());
+        assertEquals(Direction.N, rover1.getPosition().getDirection());
     }
 
     @Test
@@ -255,6 +265,11 @@ class MissionControlTest {
         });
 
         assertEquals("Cannot move here, position already occupied", exception.getMessage());
+
+        //Check the rover position remains unchanged
+        assertEquals(0, rover1.getPosition().getX());
+        assertEquals(0, rover1.getPosition().getY());
+        assertEquals(Direction.N, rover1.getPosition().getDirection());
     }
 
     @Test

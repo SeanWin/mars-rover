@@ -31,18 +31,14 @@ public class MissionControl {
     }
 
     public Position executeInstructions(Rover rover, Instruction[] instructions){
-        for(Instruction instruction:instructions){
-            if(instruction.equals(Instruction.M)){
-                Position nextPosition = rover.nextPosition();
-                if(!plateau.isWithinBounds(nextPosition.getX(), nextPosition.getY())){
-                    throw new IllegalStateException("Rover out of bounds");
-                }
-                if (getRoverPositions().stream().anyMatch(pos -> pos.getX() == nextPosition.getX() && pos.getY() == nextPosition.getY())) {
-                    throw new IllegalArgumentException("Cannot move here, position already occupied");
-                }
+        // Validate the movement with simulation first
+        simulateInstructions(rover, instructions);
+
+        // If simulation is successful, execute the real instructions
+        for (Instruction instruction : instructions) {
+            if (instruction.equals(Instruction.M)) {
                 rover.move();
-            }
-            else{
+            } else {
                 rover.turn(instruction);
             }
         }
