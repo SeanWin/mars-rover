@@ -1,4 +1,12 @@
-package org.example;
+package org.MarsRover.UI;
+
+import org.MarsRover.Input.InputParser;
+import org.MarsRover.Input.Instruction;
+import org.MarsRover.Input.PlateauSize;
+import org.MarsRover.Input.Position;
+import org.MarsRover.logic.MissionControl;
+import org.MarsRover.logic.Plateau;
+import org.MarsRover.logic.Rover;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +61,7 @@ public class UI {
                 System.out.println("Enter instructions");
                 String input = scanner.nextLine();
                 Instruction[] instructions = InputParser.parseInstructions(input);
-                Rover rover = missionControl.rovers.getLast();
+                Rover rover = missionControl.getRovers().getLast();
                 Position finalPosition = missionControl.executeInstructions(rover, instructions);
                 System.out.println(finalPosition.getX()+" "+finalPosition.getY()+" "+finalPosition.getDirection());
                 stringFinalPositions.add(finalPosition.getX()+" "+finalPosition.getY()+" "+finalPosition.getDirection());

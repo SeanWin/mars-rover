@@ -1,15 +1,22 @@
-package org.example;
+package org.MarsRover.logic;
+
+import org.MarsRover.Input.Instruction;
+import org.MarsRover.Input.Position;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MissionControl {
-    Plateau plateau;
-    List<Rover> rovers;
+    private Plateau plateau;
+    private List<Rover> rovers;
 
     public MissionControl(Plateau plateau) {
         this.plateau = plateau;
         this.rovers = new ArrayList<>();
+    }
+
+    public List<Rover> getRovers() {
+        return rovers;
     }
 
     public void addRover(Rover rover){

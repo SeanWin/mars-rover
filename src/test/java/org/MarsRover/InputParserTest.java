@@ -1,6 +1,8 @@
-package org.example;
+package org.MarsRover;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.MarsRover.Input.*;
 import org.junit.jupiter.api.Test;
 
 

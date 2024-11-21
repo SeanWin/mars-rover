@@ -1,4 +1,8 @@
-package org.example;
+package org.MarsRover.logic;
+
+import org.MarsRover.Input.Direction;
+import org.MarsRover.Input.Instruction;
+import org.MarsRover.Input.Position;
 
 public class Rover {
     private Position position;

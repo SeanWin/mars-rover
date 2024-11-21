@@ -1,4 +1,4 @@
-package org.example;
+package org.MarsRover.Input;
 
 public class InputParser {
 

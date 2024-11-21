@@ -1,5 +1,7 @@
-package org.example;
+package org.MarsRover;
 
+import org.MarsRover.Input.PlateauSize;
+import org.MarsRover.logic.Plateau;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,8 +10,8 @@ class PlateauTest {
     @Test
     void testValidPlateau() {
         Plateau plateau = new Plateau(new PlateauSize(5,5));
-        assertEquals(5, plateau.plateauSize.getX());
-        assertEquals(5, plateau.plateauSize.getY());
+        assertEquals(5, plateau.getPlateauSize().getX());
+        assertEquals(5, plateau.getPlateauSize().getY());
     }
 
     @Test

@@ -1,5 +1,12 @@
-package org.example;
+package org.MarsRover;
 
+import org.MarsRover.Input.Direction;
+import org.MarsRover.Input.Instruction;
+import org.MarsRover.Input.PlateauSize;
+import org.MarsRover.Input.Position;
+import org.MarsRover.logic.MissionControl;
+import org.MarsRover.logic.Plateau;
+import org.MarsRover.logic.Rover;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,11 +20,11 @@ class MissionControlTest {
 
     @Test
     void testAddRover_withinBounds() {
-        Position position = new Position(1,2,Direction.N);
+        Position position = new Position(1,2, Direction.N);
         Rover rover = new Rover(position);
         missionControl.addRover(rover);
-        assertTrue(missionControl.rovers.contains(rover));
-        assertEquals(missionControl.rovers.size(),1);
+        assertTrue(missionControl.getRovers().contains(rover));
+        assertEquals(missionControl.getRovers().size(),1);
     }
 
     @Test
@@ -25,8 +32,8 @@ class MissionControlTest {
         Position position = new Position(5,5,Direction.N);
         Rover rover = new Rover(position);
         missionControl.addRover(rover);
-        assertTrue(missionControl.rovers.contains(rover));
-        assertEquals(missionControl.rovers.size(),1);
+        assertTrue(missionControl.getRovers().contains(rover));
+        assertEquals(missionControl.getRovers().size(),1);
     }
 
     @Test
@@ -40,10 +47,10 @@ class MissionControlTest {
         missionControl.addRover(rover1);
         missionControl.addRover(rover2);
         missionControl.addRover(rover3);
-        assertTrue(missionControl.rovers.contains(rover1));
-        assertTrue(missionControl.rovers.contains(rover2));
-        assertTrue(missionControl.rovers.contains(rover3));
-        assertEquals(missionControl.rovers.size(),3);
+        assertTrue(missionControl.getRovers().contains(rover1));
+        assertTrue(missionControl.getRovers().contains(rover2));
+        assertTrue(missionControl.getRovers().contains(rover3));
+        assertEquals(missionControl.getRovers().size(),3);
     }
 
     @Test

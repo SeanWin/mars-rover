@@ -1,5 +1,9 @@
-package org.example;
+package org.MarsRover;
 
+import org.MarsRover.Input.*;
+import org.MarsRover.logic.MissionControl;
+import org.MarsRover.logic.Plateau;
+import org.MarsRover.logic.Rover;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +26,7 @@ class IntegrationTest {
         missionControl.addRover(rover);
 
         Position finalPosition = missionControl.executeInstructions(rover, instructions);
-        Position expected = new Position(0,0,Direction.S);
+        Position expected = new Position(0,0, Direction.S);
 
         assertEquals(expected.getX(),finalPosition.getX());
         assertEquals(expected.getY(),finalPosition.getY());
@@ -50,8 +54,8 @@ class IntegrationTest {
         Rover rover2 = new Rover(position2);
         missionControl.addRover(rover);
         missionControl.addRover(rover2);
-        Position finalPosition1 = missionControl.executeInstructions(missionControl.rovers.get(0),instructions);
-        Position finalPosition2 = missionControl.executeInstructions(missionControl.rovers.get(1),instructions2);
+        Position finalPosition1 = missionControl.executeInstructions(missionControl.getRovers().get(0),instructions);
+        Position finalPosition2 = missionControl.executeInstructions(missionControl.getRovers().get(1),instructions2);
         Position expected1 = new Position(1,3,Direction.N);
         Position expected2 = new Position(5,1,Direction.E);
 

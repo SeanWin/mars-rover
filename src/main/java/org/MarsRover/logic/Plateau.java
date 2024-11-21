@@ -1,7 +1,9 @@
-package org.example;
+package org.MarsRover.logic;
+
+import org.MarsRover.Input.PlateauSize;
 
 public class Plateau {
-    PlateauSize plateauSize;
+    private PlateauSize plateauSize;
 
     public Plateau(PlateauSize plateauSize) {
         if(plateauSize.getX()<1||plateauSize.getY()<1){
@@ -14,4 +16,7 @@ public class Plateau {
         return 0 <= x && x <= plateauSize.getX() && 0 <= y && y <= plateauSize.getY();
     }
 
+    public PlateauSize getPlateauSize() {
+        return plateauSize;
+    }
 }
