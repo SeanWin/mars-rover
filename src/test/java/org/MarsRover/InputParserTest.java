@@ -9,35 +9,112 @@ import org.junit.jupiter.api.Test;
 public class InputParserTest {
 
     @Test
-    void testParsePlateau_ValidInput() {
-        String input = "5 5";
+    void parsePlateau_ValidInput() {
+        PlateauSize plateauSize = InputParser.parsePlateau("5 5");
+        assertEquals(5, plateauSize.getX());
+        assertEquals(5, plateauSize.getY());
 
-        PlateauSize plateau = InputParser.parsePlateau(input);
+        PlateauSize plateauSize2 = InputParser.parsePlateau("10 20");
+        assertEquals(10, plateauSize2.getX());
+        assertEquals(20, plateauSize2.getY());
 
-        assertNotNull(plateau);
-        assertEquals(5, plateau.getX());
-        assertEquals(5, plateau.getY());
+        PlateauSize plateauSize3 = InputParser.parsePlateau("    15     25    ");
+        assertEquals(15, plateauSize3.getX());
+        assertEquals(25, plateauSize3.getY());
+
     }
 
     @Test
-    void testParsePlateau_InvalidInput() {
-        String input = "5";
-
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            InputParser.parsePlateau(input);
+    void parsePlateau_NullInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau(null);
         });
-        assertTrue(exception.getMessage().contains("Invalid input"));
+        assertEquals("Input cannot be null.", exception.getMessage());
     }
 
     @Test
-    void testParsePlateau_EmptyInput() {
-        String input = "";
-
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            InputParser.parsePlateau(input);
+    void parsePlateau_EmptyInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("");
         });
-        System.out.println(exception);
-        assertTrue(exception.getMessage().contains("Invalid input"));
+        assertEquals("Input must be two space-separated positive integers.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("   ");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception2.getMessage());
+    }
+
+    @Test
+    void parsePlateau_ZeroDimensions() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("0 0");
+        });
+        assertEquals("Plateau dimensions must be greater than zero.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5 0");
+        });
+        assertEquals("Plateau dimensions must be greater than zero.", exception2.getMessage());
+
+        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("0 5");
+        });
+        assertEquals("Plateau dimensions must be greater than zero.", exception3.getMessage());
+    }
+
+    @Test
+    void parsePlateau_NegativeInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("-5 5");
+        });
+        assertEquals("Input must be two space-separated positive integers.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5 -5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception2.getMessage());
+
+        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("-5 -5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception3.getMessage());
+    }
+
+    @Test
+    void parsePlateau_InvalidFormats() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("55");
+        });
+        assertEquals("Input must be two space-separated positive integers.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5 5 5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception2.getMessage());
+
+        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("five five");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception3.getMessage());
+
+        Exception exception4 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5,5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception4.getMessage());
+    }
+
+    @Test
+    void parsePlateau_OutOfRangeInput() {
+        Exception exception = assertThrows(NumberFormatException.class, () -> {
+            InputParser.parsePlateau("2147483648 5");
+        });
+        assertEquals("Input values too large", exception.getMessage());
+
+        Exception exception2 = assertThrows(NumberFormatException.class, () -> {
+            InputParser.parsePlateau("2147483648 5");
+        });
+        assertEquals("Input values too large",exception2.getMessage());
     }
 
     @Test
