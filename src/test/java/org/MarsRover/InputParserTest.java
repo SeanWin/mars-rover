@@ -212,35 +212,47 @@ public class InputParserTest {
     }
 
     @Test
-    void testParseInstructions_ValidInput() {
-        String input = "LMRMLMLMM";
-
-        Instruction[] instructions = InputParser.parseInstructions(input);
-
-        assertNotNull(instructions);
-        assertEquals(9, instructions.length);
-        assertEquals(Instruction.L, instructions[0]);
-        assertEquals(Instruction.M, instructions[1]);
-        assertEquals(Instruction.R, instructions[2]);
+    void parseInstructions_validInputs() {
+        assertAll(
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L},
+                        InputParser.parseInstructions("L")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R},
+                        InputParser.parseInstructions("LR")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R, Instruction.M},
+                        InputParser.parseInstructions("LRM")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R, Instruction.M},
+                        InputParser.parseInstructions("   L  R  M ")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R, Instruction.M},
+                        InputParser.parseInstructions("lrm")
+                )
+        );
     }
 
     @Test
-    void testParseInstructions_EmptyInput() {
-        String input = "";
-
-        Instruction[] commands = InputParser.parseInstructions(input);
-
-        assertNotNull(commands);
-        assertEquals(0, commands.length);
+    void parseInstructions_nullInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(null));
+        assertEquals("Input cannot be null", exception.getMessage());
     }
 
     @Test
-    void testParseInstructions_InvalidInstruction() {
-        String input = "LMX";
+    void parseInstructions_emptyInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(""));
+        assertEquals("Input cannot be empty", exception.getMessage());
+    }
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            InputParser.parseInstructions(input);
-        });
-        assertEquals("No enum constant org.example.Instruction.X", exception.getMessage());
+    @Test
+    void parseInstructions_invalidCharacters_shouldThrowException() {
+        String input = "LRX";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(input));
+        assertEquals("Instruction must be one of: L, R, M", exception.getMessage());
     }
 }
