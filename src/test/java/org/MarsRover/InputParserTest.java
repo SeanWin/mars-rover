@@ -9,109 +9,250 @@ import org.junit.jupiter.api.Test;
 public class InputParserTest {
 
     @Test
-    void testParsePlateau_ValidInput() {
-        String input = "5 5";
+    void parsePlateau_ValidInput() {
+        PlateauSize plateauSize = InputParser.parsePlateau("5 5");
+        assertEquals(5, plateauSize.getX());
+        assertEquals(5, plateauSize.getY());
 
-        PlateauSize plateau = InputParser.parsePlateau(input);
+        PlateauSize plateauSize2 = InputParser.parsePlateau("10 20");
+        assertEquals(10, plateauSize2.getX());
+        assertEquals(20, plateauSize2.getY());
 
-        assertNotNull(plateau);
-        assertEquals(5, plateau.getX());
-        assertEquals(5, plateau.getY());
+        PlateauSize plateauSize3 = InputParser.parsePlateau("    15     25    ");
+        assertEquals(15, plateauSize3.getX());
+        assertEquals(25, plateauSize3.getY());
+
     }
 
     @Test
-    void testParsePlateau_InvalidInput() {
-        String input = "5";
-
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            InputParser.parsePlateau(input);
+    void parsePlateau_NullInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau(null);
         });
-        assertTrue(exception.getMessage().contains("Invalid input"));
+        assertEquals("Input cannot be null.", exception.getMessage());
     }
 
     @Test
-    void testParsePlateau_EmptyInput() {
+    void parsePlateau_EmptyInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("");
+        });
+        assertEquals("Input must be two space-separated positive integers.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("   ");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception2.getMessage());
+    }
+
+    @Test
+    void parsePlateau_ZeroDimensions() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("0 0");
+        });
+        assertEquals("Plateau dimensions must be greater than zero.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5 0");
+        });
+        assertEquals("Plateau dimensions must be greater than zero.", exception2.getMessage());
+
+        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("0 5");
+        });
+        assertEquals("Plateau dimensions must be greater than zero.", exception3.getMessage());
+    }
+
+    @Test
+    void parsePlateau_NegativeInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("-5 5");
+        });
+        assertEquals("Input must be two space-separated positive integers.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5 -5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception2.getMessage());
+
+        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("-5 -5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception3.getMessage());
+    }
+
+    @Test
+    void parsePlateau_InvalidFormats() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("55");
+        });
+        assertEquals("Input must be two space-separated positive integers.", exception.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5 5 5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception2.getMessage());
+
+        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("five five");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception3.getMessage());
+
+        Exception exception4 = assertThrows(IllegalArgumentException.class, () -> {
+            InputParser.parsePlateau("5,5");
+        });
+        assertEquals("Input must be two space-separated positive integers.",exception4.getMessage());
+    }
+
+    @Test
+    void parsePlateau_OutOfRangeInput() {
+        Exception exception = assertThrows(NumberFormatException.class, () -> {
+            InputParser.parsePlateau("2147483648 5");
+        });
+        assertEquals("Input values too large", exception.getMessage());
+
+        Exception exception2 = assertThrows(NumberFormatException.class, () -> {
+            InputParser.parsePlateau("2147483648 5");
+        });
+        assertEquals("Input values too large",exception2.getMessage());
+    }
+
+    @Test
+    void parsePosition_validInputs() {
+        assertAll(
+                () -> {
+                    Position position = InputParser.parsePosition("1 2 N");
+                    assertEquals(1, position.getX());
+                    assertEquals(2, position.getY());
+                    assertEquals(Direction.N, position.getDirection());
+                },
+                () -> {
+                    Position position = InputParser.parsePosition("   0    2    E   ");
+                    assertEquals(0, position.getX());
+                    assertEquals(2, position.getY());
+                    assertEquals(Direction.E, position.getDirection());
+                },
+                () -> {
+                    Position position = InputParser.parsePosition("1 2 w");
+                    assertEquals(1, position.getX());
+                    assertEquals(2, position.getY());
+                    assertEquals(Direction.W, position.getDirection());
+                }
+        );
+    }
+
+    @Test
+    void parsePosition_nullInput() {
+        String input = null;
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input cannot be null.", exception.getMessage());
+    }
+
+    @Test
+    void parsePosition_emptyInput() {
         String input = "";
-
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            InputParser.parsePlateau(input);
-        });
-        System.out.println(exception);
-        assertTrue(exception.getMessage().contains("Invalid input"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
     }
 
     @Test
-    void testParsePosition_ValidInput() {
-        String input = "1 2 N";
-
-        Position position = InputParser.parsePosition(input);
-
-        assertNotNull(position);
-        assertEquals(1, position.getX());
-        assertEquals(2, position.getY());
-        assertEquals(Direction.N, position.getDirection());
+    void parsePosition_incorrectNumberOfFields() {
+        assertAll(
+                () -> {
+                    String input = "1";
+                    Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+                    assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+                },
+                () -> {
+                    String input = "1 N";
+                    Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+                    assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+                },
+                () -> {
+                    String input = "1 1 2 N";
+                    Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+                    assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+                }
+        );
     }
 
     @Test
-    void testParsePosition_InvalidDirection() {
-        String input = "1 2 X";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            InputParser.parsePosition(input);
-        });
-        assertEquals("Invalid input", exception.getMessage());
+    void parsePosition_noSpaces() {
+        String input = "12N";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
     }
 
     @Test
-    void testParsePosition_InvalidCoordinates() {
-        String input = "A B N";
-
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            InputParser.parsePosition(input);
-        });
-        assertTrue(exception.getMessage().contains("For input string"));
+    void parsePosition_negativeCoordinates() {
+        String input = "-1 2 N";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
     }
 
     @Test
-    void testParsePosition_MissingFields() {
-        String input = "1 N";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            InputParser.parsePosition(input);
-        });
-        assertTrue(exception.getMessage().contains("Invalid input"));
+    void parsePosition_nonNumericCoordinates() {
+        String input = "x 2 N";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
     }
 
     @Test
-    void testParseInstructions_ValidInput() {
-        String input = "LMRMLMLMM";
-
-        Instruction[] instructions = InputParser.parseInstructions(input);
-
-        assertNotNull(instructions);
-        assertEquals(9, instructions.length);
-        assertEquals(Instruction.L, instructions[0]);
-        assertEquals(Instruction.M, instructions[1]);
-        assertEquals(Instruction.R, instructions[2]);
+    void parsePosition_invalidDirection() {
+        String input = "1 2 x";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Direction must be one of: N, E, S, W", exception.getMessage());
     }
 
     @Test
-    void testParseInstructions_EmptyInput() {
-        String input = "";
-
-        Instruction[] commands = InputParser.parseInstructions(input);
-
-        assertNotNull(commands);
-        assertEquals(0, commands.length);
+    void parsePosition_largeCoordinate() {
+        String input = "2147483648 2 N";
+        Exception exception = assertThrows(NumberFormatException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input coordinate values too large", exception.getMessage());
     }
 
     @Test
-    void testParseInstructions_InvalidInstruction() {
-        String input = "LMX";
+    void parseInstructions_validInputs() {
+        assertAll(
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L},
+                        InputParser.parseInstructions("L")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R},
+                        InputParser.parseInstructions("LR")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R, Instruction.M},
+                        InputParser.parseInstructions("LRM")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R, Instruction.M},
+                        InputParser.parseInstructions("   L  R  M ")
+                ),
+                () -> assertArrayEquals(
+                        new Instruction[]{Instruction.L, Instruction.R, Instruction.M},
+                        InputParser.parseInstructions("lrm")
+                )
+        );
+    }
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            InputParser.parseInstructions(input);
-        });
-        assertEquals("No enum constant org.example.Instruction.X", exception.getMessage());
+    @Test
+    void parseInstructions_nullInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(null));
+        assertEquals("Input cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void parseInstructions_emptyInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(""));
+        assertEquals("Input cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    void parseInstructions_invalidCharacters_shouldThrowException() {
+        String input = "LRX";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(input));
+        assertEquals("Instruction must be one of: L, R, M", exception.getMessage());
     }
 }
