@@ -253,6 +253,6 @@ public class InputParserTest {
     void parseInstructions_invalidCharacters_shouldThrowException() {
         String input = "LRX";
         Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parseInstructions(input));
-        assertEquals("Instruction must be one of: L, R, M", exception.getMessage());
+        assertEquals("Instructions must consist of only the following letters: L, R, M", exception.getMessage());
     }
 }

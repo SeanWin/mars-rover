@@ -71,7 +71,7 @@ public class InputParser {
             return instructions;
 
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Instruction must be one of: L, R, M");
+            throw new IllegalArgumentException("Instructions must consist of only the following letters: L, R, M");
         }
     }
 }
