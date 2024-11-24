@@ -54,13 +54,13 @@ class MissionControlTest {
     }
 
     @Test
-    void testAddRover_invalidPosition() {
+    void testAddRover_invalidOutOfBounds() {
         Position position = new Position(-1,-1,Direction.N);
         Rover rover = new Rover(position);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.addRover(rover);
         });
-        assertEquals("Rover position out of bounds", exception.getMessage());
+        assertEquals("Error: rover deployment out of bounds detected! Please reenter a position within plateau bounds", exception.getMessage());
     }
 
     @Test
@@ -74,7 +74,7 @@ class MissionControlTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.addRover(rover2);
         });
-        assertEquals("Cannot deploy here, position already occupied", exception.getMessage());
+        assertEquals("Error: rover deployment collision detected! Please reenter a position which isn't already occupied", exception.getMessage());
     }
 
     @Test
@@ -89,7 +89,7 @@ class MissionControlTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.addRover(rover2);
         });
-        assertEquals("Cannot deploy here, position already occupied", exception.getMessage());
+        assertEquals("Error: rover deployment collision detected! Please reenter a position which isn't already occupied", exception.getMessage());
     }
 
     @Test
@@ -221,7 +221,7 @@ class MissionControlTest {
             missionControl.executeInstructions(rover, instructions);
         });
 
-        assertEquals("Rover out of bounds", exception.getMessage());
+        assertEquals("Error: rover movement out of bounds detected! please reenter valid instructions", exception.getMessage());
 
         //Check the rover position remains unchanged
         assertEquals(0, rover.getPosition().getX());
@@ -242,11 +242,11 @@ class MissionControlTest {
         Instruction[] instructions = {Instruction.M};
 
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.executeInstructions(rover1, instructions);
         });
 
-        assertEquals("Cannot move here, position already occupied", exception.getMessage());
+        assertEquals("Error: rover movement collision detected! Please reenter valid instructions", exception.getMessage());
 
         //Check the rover position remains unchanged
         assertEquals(0, rover1.getPosition().getX());
@@ -267,11 +267,11 @@ class MissionControlTest {
         Instruction[] instructions = {Instruction.M};
 
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.executeInstructions(rover1, instructions);
         });
 
-        assertEquals("Cannot move here, position already occupied", exception.getMessage());
+        assertEquals("Error: rover movement collision detected! Please reenter valid instructions", exception.getMessage());
 
         //Check the rover position remains unchanged
         assertEquals(0, rover1.getPosition().getX());
@@ -332,7 +332,7 @@ class MissionControlTest {
         Exception exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.simulateInstructions(rover, instructions);
         });
-        assertEquals("Rover out of bounds", exception.getMessage());
+        assertEquals("Error: rover movement out of bounds detected! please reenter valid instructions", exception.getMessage());
     }
 
     @Test
@@ -343,10 +343,10 @@ class MissionControlTest {
         missionControl.addRover(rover2);
         Instruction[] instructions = {Instruction.M}; // Moving north to collide
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             missionControl.simulateInstructions(rover1, instructions);
         });
-        assertEquals("Cannot move here, position already occupied", exception.getMessage());
+        assertEquals("Error: rover movement collision detected! Please reenter valid instructions", exception.getMessage());
     }
 
     @Test

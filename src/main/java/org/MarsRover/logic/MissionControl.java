@@ -21,10 +21,10 @@ public class MissionControl {
 
     public void addRover(Rover rover){
         if(!plateau.isWithinBounds(rover.getPosition().getX(),rover.getPosition().getY()))
-            throw new IllegalArgumentException("Rover position out of bounds");
+            throw new IllegalStateException("Error: rover deployment out of bounds detected! Please reenter a position within plateau bounds");
 
         if (getRoverPositions().stream().anyMatch(pos -> pos.getX() == rover.getPosition().getX() && pos.getY() == rover.getPosition().getY())) {
-            throw new IllegalStateException("Cannot deploy here, position already occupied");
+            throw new IllegalStateException("Error: rover deployment collision detected! Please reenter a position which isn't already occupied");
         }
         rovers.add(rover);
     }
@@ -65,10 +65,10 @@ public class MissionControl {
             if(instruction.equals(Instruction.M)){
                 Position nextPosition = simulatedRover.nextPosition();
                 if(!plateau.isWithinBounds(nextPosition.getX(), nextPosition.getY())){
-                    throw new IllegalStateException("Rover out of bounds");
+                    throw new IllegalStateException("Error: rover movement out of bounds detected! please reenter valid instructions");
                 }
                 if (otherRoverPositions.stream().anyMatch(pos -> pos.getX() == nextPosition.getX() && pos.getY() == nextPosition.getY())) {
-                    throw new IllegalArgumentException("Cannot move here, position already occupied");
+                    throw new IllegalStateException("Error: rover movement collision detected! Please reenter valid instructions");
                 }
                 simulatedRover.move();
             }
