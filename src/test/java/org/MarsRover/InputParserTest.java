@@ -118,45 +118,97 @@ public class InputParserTest {
     }
 
     @Test
-    void testParsePosition_ValidInput() {
-        String input = "1 2 N";
-
-        Position position = InputParser.parsePosition(input);
-
-        assertNotNull(position);
-        assertEquals(1, position.getX());
-        assertEquals(2, position.getY());
-        assertEquals(Direction.N, position.getDirection());
+    void parsePosition_validInputs() {
+        assertAll(
+                () -> {
+                    Position position = InputParser.parsePosition("1 2 N");
+                    assertEquals(1, position.getX());
+                    assertEquals(2, position.getY());
+                    assertEquals(Direction.N, position.getDirection());
+                },
+                () -> {
+                    Position position = InputParser.parsePosition("   0    2    E   ");
+                    assertEquals(0, position.getX());
+                    assertEquals(2, position.getY());
+                    assertEquals(Direction.E, position.getDirection());
+                },
+                () -> {
+                    Position position = InputParser.parsePosition("1 2 w");
+                    assertEquals(1, position.getX());
+                    assertEquals(2, position.getY());
+                    assertEquals(Direction.W, position.getDirection());
+                }
+        );
     }
 
     @Test
-    void testParsePosition_InvalidDirection() {
-        String input = "1 2 X";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            InputParser.parsePosition(input);
-        });
-        assertEquals("Invalid input", exception.getMessage());
+    void parsePosition_nullInput() {
+        String input = null;
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input cannot be null.", exception.getMessage());
     }
 
     @Test
-    void testParsePosition_InvalidCoordinates() {
-        String input = "A B N";
-
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            InputParser.parsePosition(input);
-        });
-        assertTrue(exception.getMessage().contains("For input string"));
+    void parsePosition_emptyInput() {
+        String input = "";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
     }
 
     @Test
-    void testParsePosition_MissingFields() {
-        String input = "1 N";
+    void parsePosition_incorrectNumberOfFields() {
+        assertAll(
+                () -> {
+                    String input = "1";
+                    Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+                    assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+                },
+                () -> {
+                    String input = "1 N";
+                    Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+                    assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+                },
+                () -> {
+                    String input = "1 1 2 N";
+                    Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+                    assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+                }
+        );
+    }
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            InputParser.parsePosition(input);
-        });
-        assertTrue(exception.getMessage().contains("Invalid input"));
+    @Test
+    void parsePosition_noSpaces() {
+        String input = "12N";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+    }
+
+    @Test
+    void parsePosition_negativeCoordinates() {
+        String input = "-1 2 N";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+    }
+
+    @Test
+    void parsePosition_nonNumericCoordinates() {
+        String input = "x 2 N";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input must be two non-negative integers and a compass direction letter, all space-separated", exception.getMessage());
+    }
+
+    @Test
+    void parsePosition_invalidDirection() {
+        String input = "1 2 x";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Direction must be one of: N, E, S, W", exception.getMessage());
+    }
+
+    @Test
+    void parsePosition_largeCoordinate() {
+        String input = "2147483648 2 N";
+        Exception exception = assertThrows(NumberFormatException.class, () -> InputParser.parsePosition(input));
+        assertEquals("Input coordinate values too large", exception.getMessage());
     }
 
     @Test
