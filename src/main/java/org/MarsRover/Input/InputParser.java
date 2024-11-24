@@ -53,11 +53,25 @@ public class InputParser {
        }
    }
 
-    public static Instruction[] parseInstructions(String input){
-        Instruction[] instructions = new Instruction[input.length()];
-        for (int i = 0; i < input.length(); i++) {
-            instructions[i]=Instruction.valueOf(input.substring(i,i+1));
+    public static Instruction[] parseInstructions(String input) {
+        if (input == null) {
+            throw new IllegalArgumentException("Input cannot be null");
         }
-        return instructions;
+
+        input = input.trim().replaceAll("\\s+", "");
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("Input cannot be empty");
+        }
+
+        Instruction[] instructions = new Instruction[input.length()];
+        try {
+            for (int i = 0; i < input.length(); i++) {
+                instructions[i] = Instruction.valueOf(String.valueOf(input.charAt(i)).toUpperCase());
+            }
+            return instructions;
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Instruction must be one of: L, R, M");
+        }
     }
 }
