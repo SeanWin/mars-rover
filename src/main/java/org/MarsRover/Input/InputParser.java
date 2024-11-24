@@ -27,31 +27,31 @@ public class InputParser {
         }
     }
 
-    public static Position parsePosition(String input) {
-        String[] parts = input.split(" ");
-        if(parts.length!=3){
-            throw new IllegalArgumentException("Invalid input");
-        }
+   public static Position parsePosition(String input){
+       if (input == null) {
+           throw new IllegalArgumentException("Input cannot be null.");
+       }
 
-        int x = Integer.parseInt(parts[0]);
-        int y = Integer.parseInt(parts[1]);
-        Direction direction = null;
-        if (parts[2].equalsIgnoreCase("n")) {
-            direction = Direction.N;
-        } else if (parts[2].equalsIgnoreCase("e")) {
-            direction = Direction.E;
-        } else if (parts[2].equalsIgnoreCase("s")) {
-            direction = Direction.S;
-        } else if (parts[2].equalsIgnoreCase("w")) {
-            direction = Direction.W;
-        }
-        if(direction == null){
-            throw new IllegalArgumentException("Invalid input");
-        }
+       input = input.trim().replaceAll("\\s+", " ");
 
-        return new Position(x, y, direction);
+       if (!input.matches("\\d+ \\d+ \\w+")) {
+           throw new IllegalArgumentException("Input must be two non-negative integers and a compass direction letter, all space-separated");
+       }
 
-    }
+       String[] parts = input.split(" ");
+       parts[2] = parts[2].toUpperCase();
+       try{
+           int x = Integer.parseInt(parts[0]);
+           int y = Integer.parseInt(parts[1]);
+           Direction direction = Direction.valueOf(parts[2]);
+           return new Position(x,y,direction);
+
+       } catch (NumberFormatException e) {
+           throw new NumberFormatException("Input coordinate values too large");
+       } catch (IllegalArgumentException e) {
+           throw new IllegalArgumentException("Direction must be one of: N, E, S, W");
+       }
+   }
 
     public static Instruction[] parseInstructions(String input){
         Instruction[] instructions = new Instruction[input.length()];
