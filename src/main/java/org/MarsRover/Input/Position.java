@@ -43,4 +43,15 @@ public class Position {
                 ", direction=" + direction +
                 '}';
     }
+
+    public Position getNextPosition(){
+        Position nextPosition = new Position(this.getX(),this.getY(),this.getDirection());
+        switch (direction) {
+            case N -> nextPosition.setY(nextPosition.getY() + 1);
+            case E -> nextPosition.setX(nextPosition.getX() + 1);
+            case S -> nextPosition.setY(nextPosition.getY() - 1);
+            case W -> nextPosition.setX(nextPosition.getX() - 1);
+        }
+        return nextPosition;
+    }
 }
