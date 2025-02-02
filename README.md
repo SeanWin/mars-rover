@@ -26,12 +26,13 @@ The project follows Object-Oriented Programming principles, making it easy to ex
 
 Ensure you have the following installed on your machine:
 
-- **Java JDK 17+**: [Download Here](https://www.oracle.com/java/technologies/javase-downloads.html)
+- **Java 21**: [Download Here](https://www.oracle.com/java/technologies/javase-downloads.html)
 - **Maven**: [Install Guide](https://maven.apache.org/install.html)
 
 ### Running the Project
 
-- **Fork and clone the repository**: [Github link](https://github.com/SeanWin/mars-rover)
+- **Fork and clone the repository**: [GitHub link](https://github.com/SeanWin/mars-rover)
+- **Run the Main method and follow the console prompts**
 - **Input format**: The program expects input in the following format(which is an x coordinate, y coordinate and compass direction)
 ```
 5 5
