@@ -1,6 +1,5 @@
 package org.MarsRover.logic;
 
-import org.MarsRover.Input.Direction;
 import org.MarsRover.Input.Instruction;
 import org.MarsRover.Input.Position;
 
@@ -19,53 +18,12 @@ public class Rover {
         if (position.getDirection() == null) {
             throw new IllegalArgumentException("Invalid direction");
         }
-        if(instruction.equals(Instruction.L)){
-            switch (position.getDirection()){
-                case Direction.N:
-                position.setDirection(Direction.W);
-                break;
 
-                case Direction.E:
-                    position.setDirection(Direction.N);
-                    break;
-
-                case Direction.S:
-                    position.setDirection(Direction.E);
-                    break;
-
-                case Direction.W:
-                    position.setDirection(Direction.S);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Invalid direction");
+        switch (instruction) {
+            case L -> position = new Position(position.getX(), position.getY(), position.getDirection().turnLeft());
+            case R -> position = new Position(position.getX(), position.getY(), position.getDirection().turnRight());
+            default -> throw new IllegalArgumentException("Invalid instruction");
             }
-        }
-        else if(instruction.equals(Instruction.R)){
-            switch (position.getDirection()){
-                case Direction.N:
-                    position.setDirection(Direction.E);
-                    break;
-
-                case Direction.E:
-                    position.setDirection(Direction.S);
-                    break;
-
-                case Direction.S:
-                    position.setDirection(Direction.W);
-                    break;
-
-                case Direction.W:
-                    position.setDirection(Direction.N);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Invalid direction");
-            }
-        }
-        else{
-            throw new IllegalArgumentException("Invalid instruction");
-        }
     }
 
     public void move() {
