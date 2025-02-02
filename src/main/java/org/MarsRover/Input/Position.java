@@ -31,27 +31,13 @@ public class Position {
         this.y = y;
     }
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    @Override
-    public String toString() {
-        return "Position{" +
-                "x=" + x +
-                ", y=" + y +
-                ", direction=" + direction +
-                '}';
-    }
 
     public Position getNextPosition(){
-        Position nextPosition = new Position(this.getX(),this.getY(),this.getDirection());
-        switch (direction) {
-            case N -> nextPosition.setY(nextPosition.getY() + 1);
-            case E -> nextPosition.setX(nextPosition.getX() + 1);
-            case S -> nextPosition.setY(nextPosition.getY() - 1);
-            case W -> nextPosition.setX(nextPosition.getX() - 1);
-        }
-        return nextPosition;
+        return switch (direction) {
+            case N -> new Position(x, y + 1, direction);
+            case E -> new Position(x + 1, y, direction);
+            case S -> new Position(x, y - 1, direction);
+            case W -> new Position(x - 1, y, direction);
+        };
     }
 }
