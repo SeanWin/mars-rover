@@ -10,8 +10,8 @@ class PlateauTest {
     @Test
     void testValidPlateau() {
         Plateau plateau = new Plateau(new PlateauSize(5,5));
-        assertEquals(5, plateau.getPlateauSize().getX());
-        assertEquals(5, plateau.getPlateauSize().getY());
+        assertEquals(5, plateau.getPlateauSize().x());
+        assertEquals(5, plateau.getPlateauSize().y());
     }
 
     @Test

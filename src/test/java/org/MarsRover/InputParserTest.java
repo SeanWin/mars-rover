@@ -11,16 +11,16 @@ public class InputParserTest {
     @Test
     void parsePlateau_ValidInput() {
         PlateauSize plateauSize = InputParser.parsePlateau("5 5");
-        assertEquals(5, plateauSize.getX());
-        assertEquals(5, plateauSize.getY());
+        assertEquals(5, plateauSize.x());
+        assertEquals(5, plateauSize.y());
 
         PlateauSize plateauSize2 = InputParser.parsePlateau("10 20");
-        assertEquals(10, plateauSize2.getX());
-        assertEquals(20, plateauSize2.getY());
+        assertEquals(10, plateauSize2.x());
+        assertEquals(20, plateauSize2.y());
 
         PlateauSize plateauSize3 = InputParser.parsePlateau("    15     25    ");
-        assertEquals(15, plateauSize3.getX());
-        assertEquals(25, plateauSize3.getY());
+        assertEquals(15, plateauSize3.x());
+        assertEquals(25, plateauSize3.y());
 
     }
 
