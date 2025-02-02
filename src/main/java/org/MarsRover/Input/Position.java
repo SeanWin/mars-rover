@@ -1,9 +1,9 @@
 package org.MarsRover.Input;
 
 public class Position {
-    private int x;
-    private int y;
-    private Direction direction;
+    private final int x;
+    private final int y;
+    private final Direction direction;
 
     public Position(int x, int y, Direction direction) {
         this.x = x;
@@ -22,15 +22,6 @@ public class Position {
     public Direction getDirection() {
         return direction;
     }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
 
     public Position getNextPosition(){
         return switch (direction) {
