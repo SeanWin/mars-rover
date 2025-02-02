@@ -63,7 +63,7 @@ public class MissionControl {
 
         for(Instruction instruction:instructions){
             if(instruction.equals(Instruction.M)){
-                Position nextPosition = simulatedRover.nextPosition();
+                Position nextPosition = simulatedPosition.getNextPosition();
                 if(!plateau.isWithinBounds(nextPosition.getX(), nextPosition.getY())){
                     throw new IllegalStateException("Error: rover movement out of bounds detected! please reenter valid instructions");
                 }
