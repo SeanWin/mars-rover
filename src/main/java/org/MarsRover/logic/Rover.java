@@ -73,40 +73,8 @@ public class Rover {
         if (position.getDirection() == null) {
             throw new IllegalArgumentException("Invalid direction");
         }
-        switch (position.getDirection()) {
-            case Direction.N:
-                position.setY(position.getY()+1);
-                break;
+        position = position.getNextPosition();
 
-            case Direction.E:
-                position.setX(position.getX()+1);
-                break;
-
-            case Direction.S:
-                position.setY(position.getY()-1);
-                break;
-
-            case Direction.W:
-                position.setX(position.getX()-1);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Invalid direction");
-        }
     }
-
-    public Position nextPosition() {
-
-        if (position.getDirection() == null) {
-            throw new IllegalArgumentException("Invalid direction");
-        }
-        return switch (position.getDirection()) {
-            case Direction.N -> new Position(position.getX(), position.getY() + 1, position.getDirection());
-            case Direction.E -> new Position(position.getX() + 1, position.getY(), position.getDirection());
-            case Direction.S -> new Position(position.getX(), position.getY() - 1, position.getDirection());
-            case Direction.W -> new Position(position.getX() - 1, position.getY(), position.getDirection());
-        };
-    }
-
 
 }
